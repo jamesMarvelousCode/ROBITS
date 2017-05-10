@@ -1,3 +1,5 @@
+//This sketch is for small trinket powered rover ROBITS using the parallax PING))) sensor
+
 #include <Adafruit_SoftServo.h>
 
 #define SERVO1PIN 0
