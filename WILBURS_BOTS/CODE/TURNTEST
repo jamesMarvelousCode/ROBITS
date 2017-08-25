@@ -61,28 +61,25 @@ void setup()
     attack_mode_timer = 0;
     attack_mode_on = false;
 
-  //attach the servos
-  servo_left.attach(SERVO1PIN);
-  servo_right.attach(SERVO2PIN);
+    //attach the servos
+    servo_left.attach(SERVO1PIN);
+    servo_right.attach(SERVO2PIN);
 }
 
 //robots primary loop; this repeats until you turn off the robot
 void loop()
 {
-  
-
-  WIGGLE_TEST();
-  
+    //WIGGLE_TEST();
     if (attack_mode_timer <= ATTACK_MODE_COOLDOWN)
     {
         attack_mode_on = true;
         attack_mode_timer = 0;
     }
-  if (attack_mode_on)
-  {
-    ATTACK_MODE();
-  }
-  else if (sonar.ping_cm() < OBSTACLE && sonar.ping_cm() != 0)
+    if (attack_mode_on)
+    {
+        ATTACK_MODE();
+    }
+    else if (sonar.ping_cm() < OBSTACLE && sonar.ping_cm() != 0)
     {
         DIVERGE();
     }
@@ -100,10 +97,9 @@ void DIVERGE()
     TURN();
 }
 
-
 void FORWARD()
 {
-  servo_left.write(LEFT_FORWARD);
+    servo_left.write(LEFT_FORWARD);
     servo_left.refresh();
     servo_right.write(RIGHT_FORWARD);
     servo_right.refresh();
@@ -123,7 +119,7 @@ void BACKWARD(int time)
     }
 }
 
-void TURN()//add a variance input param
+void TURN() //add a variance input param
 {
     ranum = random(1, 100);
 
@@ -131,7 +127,7 @@ void TURN()//add a variance input param
     {
         RIGHT_TURN(SHORT_TURN);
     }
-    else 
+    else
     {
         LEFT_TURN(SHORT_TURN);
     }
@@ -180,29 +176,33 @@ void STOP(int time)
 
 void CELEBRATE()
 {
-  STOP(SHORT_PAUSE);
-  BACKWARD(CELEBRATE_REVERSE);
-  for (int i; i < 100000;)
-  {
-    RIGHT_TURN(100);
-  } 
+    STOP(SHORT_PAUSE);
+    BACKWARD(CELEBRATE_REVERSE);
+    for (int i; i < 100000;)
+    {
+        RIGHT_TURN(100);
+        RIGHT_TURN(100);
+        BACKWARD(1000);
+        CREEP(1000);
+        LEFT_TURN(100);
+    }
 }
 
 void ATTACK_MODE()
 {
-  STOP(SHORT_PAUSE);
-  for (int i; i < STAB_MAX;)
-  {
-    if (sonar.ping_cm() < ATTACK_DISTANCE && sonar.ping_cm() != 0)
+    STOP(SHORT_PAUSE);
+    for (int i; i < STAB_MAX;)
     {
-      BACKWARD(SHORT_DELAY);
-      i++;
+        if (sonar.ping_cm() < ATTACK_DISTANCE && sonar.ping_cm() != 0)
+        {
+            BACKWARD(SHORT_DELAY);
+            i++;
+        }
+        else
+        {
+            FORWARD();
+        }
     }
-    else
-    {
-           FORWARD();    
-    }
-  }
     STOP(SHORT_PAUSE);
     attack_mode_on = false;
     BACKWARD(POST_ATTACK_REVERSE);
@@ -211,30 +211,60 @@ void ATTACK_MODE()
 
 void ATTACK_PATTERN()
 {
-  int STAB_COUNT = 0;
-  BACKWARD(SHORT_PAUSE);
-  LEFT_TURN(TURN_WIGGLE);
-  RIGHT_TURN(TURN_WIGGLE);
-  while (STAB_COUNT < STAB_MAX) {
-    STALK();
-    
-    
-  }
+    int STAB_COUNT = 0;
+    BACKWARD(SHORT_PAUSE);
+    LEFT_TURN(TURN_WIGGLE);
+    RIGHT_TURN(TURN_WIGGLE);
+    RIGHT_TURN(TURN_WIGGLE);
+    LEFT_TURN(TURN_WIGGLE);
+    while (STAB_COUNT < STAB_MAX)
+    {
+        STALK();
+        CREEP(2000);
+    }
 }
 
 void STALK()
 {
-  LEFT_TURN(TURN_WIGGLE);
-  //  if (sonar.ping_cm
+    if (sonar.ping_cm() > 60)
+    {
+        LEFT_TURN(TURN_WIGGLE);
+    }
+    else if (sonar.ping_cm() > 60)
+    {
+        RIGHT_TURN(TURN_WIGGLE);
+        RIGHT_TURN(TURN_WIGGLE);
+    }
+    else if (sonar.ping_cm() > 60)
+    {
+        LEFT_TURN(TURN_WIGGLE);
+    }
+    else
+    {
+        ATTACK_MODE();
+    }
+}
+
+void CREEP(int time);
+{
+    while (time > 0)
+    {
+        servo_left.write(LEFT_FORWARD);
+        servo_left.refresh();
+        servo_right.write(RIGHT_FORWARD);
+        servo_right.refresh();
+        delay(DRIVE_DELAY);
+        time--;
+    }
 }
 
 void WIGGLE_TEST()
 {
-  BACKWARD(SHORT_PAUSE);
-  LEFT_TURN(TURN_WIGGLE);
-  BACKWARD(SHORT_PAUSE);
-  RIGHT_TURN(TURN_WAGGLE);
-  BACKWARD(SHORT_PAUSE);
-  LEFT_TURN(TURN_WOGGLE);
-  STOP(LONG_PAUSE);
+    BACKWARD(SHORT_PAUSE);
+    LEFT_TURN(TURN_WIGGLE);
+    BACKWARD(SHORT_PAUSE);
+    RIGHT_TURN(TURN_WAGGLE);
+    BACKWARD(SHORT_PAUSE);
+    LEFT_TURN(TURN_WOGGLE);
+    STOP(LONG_PAUSE);
 }
