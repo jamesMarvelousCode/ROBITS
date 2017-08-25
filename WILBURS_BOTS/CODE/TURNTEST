@@ -69,17 +69,20 @@ void setup()
 //robots primary loop; this repeats until you turn off the robot
 void loop()
 {
-	WIGGLE_TEST();
+  
+
+  WIGGLE_TEST();
+  
     if (attack_mode_timer <= ATTACK_MODE_COOLDOWN)
     {
         attack_mode_on = true;
         attack_mode_timer = 0;
     }
-	if (attack_mode_on)
-	{
-		ATTACK_MODE();
-	}
-	else if (sonar.ping_cm() < OBSTACLE && sonar.ping_cm() != 0)
+  if (attack_mode_on)
+  {
+    ATTACK_MODE();
+  }
+  else if (sonar.ping_cm() < OBSTACLE && sonar.ping_cm() != 0)
     {
         DIVERGE();
     }
@@ -100,7 +103,7 @@ void DIVERGE()
 
 void FORWARD()
 {
-	servo_left.write(LEFT_FORWARD);
+  servo_left.write(LEFT_FORWARD);
     servo_left.refresh();
     servo_right.write(RIGHT_FORWARD);
     servo_right.refresh();
@@ -177,29 +180,29 @@ void STOP(int time)
 
 void CELEBRATE()
 {
-	STOP(SHORT_PAUSE);
-	BACKWARD(CELEBRATE_REVERSE);
-	for (int i; i < 100000;)
-	{
-		RIGHT_TURN(100);
-	}	
+  STOP(SHORT_PAUSE);
+  BACKWARD(CELEBRATE_REVERSE);
+  for (int i; i < 100000;)
+  {
+    RIGHT_TURN(100);
+  } 
 }
 
 void ATTACK_MODE()
 {
-	STOP(SHORT_PAUSE);
-	for (int i; i < STAB_MAX;)
-	{
-		if (sonar.ping_cm() < ATTACK_DISTANCE && sonar.ping_cm() != 0)
-		{
-			BACKWARD(SHORT_DELAY);
-			i++;
-		}
-		else
-		{
+  STOP(SHORT_PAUSE);
+  for (int i; i < STAB_MAX;)
+  {
+    if (sonar.ping_cm() < ATTACK_DISTANCE && sonar.ping_cm() != 0)
+    {
+      BACKWARD(SHORT_DELAY);
+      i++;
+    }
+    else
+    {
            FORWARD();    
-		}
-	}
+    }
+  }
     STOP(SHORT_PAUSE);
     attack_mode_on = false;
     BACKWARD(POST_ATTACK_REVERSE);
@@ -208,29 +211,30 @@ void ATTACK_MODE()
 
 void ATTACK_PATTERN()
 {
-	int STAB_COUNT = 0;
-	BACKWARD(SHORT_PAUSE);
-	LEFT_TURN(TURN_WIGGLE);
-	RIGHT_TURN(TURN_WIGGLE);
-	while (STAB_COUNT < STAB_MAX) {
-		STALK();
-		
-		
+  int STAB_COUNT = 0;
+  BACKWARD(SHORT_PAUSE);
+  LEFT_TURN(TURN_WIGGLE);
+  RIGHT_TURN(TURN_WIGGLE);
+  while (STAB_COUNT < STAB_MAX) {
+    STALK();
+    
+    
+  }
 }
 
 void STALK()
 {
-	LEFT_TURN(TURN_WIGGLE);
-	if (sonar.ping_cm
+  LEFT_TURN(TURN_WIGGLE);
+  //  if (sonar.ping_cm
 }
 
 void WIGGLE_TEST()
 {
-	BACKWARD(SHORT_PAUSE);
-	LEFT_TURN(TURN_WIGGLE);
-	BACKWARD(SHORT_PAUSE);
-	RIGHT_TURN(TURN_WAGGLE);
-	BACKWARD(SHORT_PAUSE);
-	LEFT_TURN(TURN_WOGGLE);
-	STOP(LONG_PAUSE);
+  BACKWARD(SHORT_PAUSE);
+  LEFT_TURN(TURN_WIGGLE);
+  BACKWARD(SHORT_PAUSE);
+  RIGHT_TURN(TURN_WAGGLE);
+  BACKWARD(SHORT_PAUSE);
+  LEFT_TURN(TURN_WOGGLE);
+  STOP(LONG_PAUSE);
 }
