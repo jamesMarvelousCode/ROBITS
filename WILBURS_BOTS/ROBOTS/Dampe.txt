@@ -1,0 +1,6 @@
+Left Track 	orange 	I/O 4
+Right Track 	orange 	I/O 3
+SONAR.vcc 	blue 	BAT
+SONAR.trig 	green 	I/O 0
+SONAR.echo 	yellow 	I/O 1
+SONAR.gnd 	orange 	Gnd
