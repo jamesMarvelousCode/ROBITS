@@ -245,7 +245,7 @@ void STALK()
     }
 }
 
-void CREEP(int time);
+void CREEP(int time)
 {
     while (time > 0)
     {
